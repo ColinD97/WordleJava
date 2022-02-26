@@ -2,18 +2,18 @@ package com.sideproject.wordleclone;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class WordleClone {
     private Scanner userInput = new Scanner(System.in);
     private List<String> wordList;
-    private String answerWord;
+    public String answerWord;
+    private Map<Character, Letter> alphabet = new HashMap<>();
+    private Map<Integer, Character> numberToAlphaMap = new HashMap<>();
 
     public WordleClone(){
         this.wordList = new ArrayList<>();
+        generateAlphabet();
         String inputFileLocation = "database\\word-list.txt";
         File inputFile = new File(inputFileLocation);
         loadWords(inputFile);
@@ -31,12 +31,13 @@ public class WordleClone {
         displayApplicationBanner();
         displayMainMenu();
         //getFileInfo(inputFile);
-
         userInput.close();
     }
 
     //game logic loop
     private void playGame(){
+        printAlphabet();
+
         System.out.println();
         System.out.println();
         printBoard("*****");
@@ -84,10 +85,58 @@ public class WordleClone {
         }
     }
 
+    //create Map of Letter class as alphabet to initialize new word
+    private void generateAlphabet(){
+        int count = 0;
+        char[] allChars = {'Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'};
+        for(char value: allChars){
+            Letter newLetter = new Letter(value);
+            numberToAlphaMap.put(count, value);
+            alphabet.put(value, newLetter);
+            count++;
+        }
+    }
+
+    //print available letters color coded to not used/ in word / in position
+    //print before every guess
+    private void printAlphabet(){
+        System.out.println("Available letters: ");
+        for (int i = 0; i < 10; i++) {
+            System.out.print(numberToAlphaMap.get(i)+"  ");
+        }
+        System.out.println();
+        for (int i = 10; i < 19; i++) {
+            System.out.print(" "+numberToAlphaMap.get(i)+" ");
+        }
+        System.out.println();
+        System.out.print("  ");
+        for (int i = 19; i < 26; i++) {
+            System.out.print("  "+numberToAlphaMap.get(i));
+        }
+    }
+
+
     // picks random location in string list to be the word to guess
     private String randomWord(){
         Random random = new Random();
-        return wordList.get(random.nextInt(wordList.size()));
+        answerWord = wordList.get(random.nextInt(wordList.size()));
+        answerWord = answerWord.toUpperCase();
+        char[] letters = answerWord.toCharArray();
+//        for (int i = 0; i < 6; i++) {
+//            char tempChar = numberToAlphaMap.get(i);
+//            Letter letter = alphabet.get(tempChar);
+//            letter.setInAnswer(true);
+//            System.out.println("Letter "+letter+" is in answer");
+//        }
+        int position = 0;
+        for(char value: letters){
+            Letter letter = alphabet.get(value);
+            letter.setInAnswer(true);
+            letter.setLetterLocations(position);
+            System.out.println("Letter "+value+" is in answer");
+            position++;
+        }
+        return answerWord;
     }
 
     private void displayApplicationBanner(){
@@ -131,9 +180,9 @@ public class WordleClone {
     private void printBoard(String word){
         word = word.toUpperCase();
         char[] letter = word.toCharArray();
-        System.out.println(" +-+-+-+-+-+");
-        System.out.printf(" |%c|%c|%c|%c|%c|\n", letter[0], letter[1], letter[2], letter[3], letter[4]);
-        System.out.println(" +-+-+-+-+-+");
+        System.out.println("       +-+-+-+-+-+");
+        System.out.printf("       |%c|%c|%c|%c|%c|\n", letter[0], letter[1], letter[2], letter[3], letter[4]);
+        System.out.println("       +-+-+-+-+-+");
     }
 
     // troubleshooting method to check input file information and validity
