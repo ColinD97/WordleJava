@@ -10,9 +10,14 @@ import java.util.Scanner;
 public class WordleClone {
     private Scanner userInput = new Scanner(System.in);
     private List<String> wordList;
+    private String answerWord;
 
     public WordleClone(){
         this.wordList = new ArrayList<>();
+        String inputFileLocation = "database\\word-list.txt";
+        File inputFile = new File(inputFileLocation);
+        loadWords(inputFile);
+        this.answerWord = randomWord();
     }
 
     public static void main(String[] args) {
@@ -22,20 +27,49 @@ public class WordleClone {
     }
 
     private void run(){
-        String inputFileLocation = "database\\word-list.txt";
-        File inputFile = new File(inputFileLocation);
-        loadWords(inputFile);
+
         displayApplicationBanner();
         displayMainMenu();
-        String guess = "wordle";
-        printBoard(randomWord());
-        getFileInfo();
-
-
+        //getFileInfo(inputFile);
 
         userInput.close();
     }
 
+    //game logic loop
+    private void playGame(){
+        System.out.println();
+        System.out.println();
+        printBoard("*****");
+        System.out.println();
+        for (int i = 0; i < 7; i++) {
+            String validGuess = userGuess();
+            printBoard(validGuess);
+        }
+    }
+
+    private String userGuess(){
+        String guess = "";
+        boolean isValid = false;
+        while (!isValid){
+            System.out.print("Enter 5 letter word to guess: ");
+            guess = userInput.nextLine();
+            if (guess.equalsIgnoreCase(answerWord)){
+                System.out.println("YOU WIN!");
+                isValid = true;
+            } else {
+                for (String word : wordList) {
+                    if (word.equalsIgnoreCase(guess)) {
+                        isValid = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return guess;
+    }
+
+    // takes inputFile and loads words into wordList List
+    // wordList is used in game as library of possible words to use and guess
     private void loadWords(File inputFile){
         try (Scanner textFile = new Scanner(inputFile)){
             int i = 0;
@@ -50,12 +84,10 @@ public class WordleClone {
         }
     }
 
+    // picks random location in string list to be the word to guess
     private String randomWord(){
         Random random = new Random();
-        //String solutionWord = wordList[random.nextInt(wordList.size())];
-        String solutionWord = wordList.get(random.nextInt(wordList.size()));
-
-        return solutionWord;
+        return wordList.get(random.nextInt(wordList.size()));
     }
 
     private void displayApplicationBanner(){
@@ -73,6 +105,27 @@ public class WordleClone {
         System.out.println("1. Play Game");
         System.out.println("2. Check stats");
         System.out.println("3. Exit");
+        boolean isInputCorrect = false;
+        while (!isInputCorrect){
+            String userChoice = userInput.nextLine();
+            switch (userChoice){
+                case "1":
+                    isInputCorrect = true;
+                    playGame();
+                    break;
+                case "2":
+                    isInputCorrect = true;
+                    System.out.println("*** Numbers ***");
+                    break;
+                case "3":
+                    System.out.println("*** Quit ***");
+                    isInputCorrect = true;
+                    break;
+                default:
+                    System.out.println("Input not valid");
+            }
+
+        }
         }
 
     private void printBoard(String word){
@@ -83,14 +136,14 @@ public class WordleClone {
         System.out.println(" +-+-+-+-+-+");
     }
 
-    public void getFileInfo() {
-        File myObj = new File("word-list.txt");
-        if (myObj.exists()) {
-            System.out.println("File name: " + myObj.getName());
-            System.out.println("Absolute path: " + myObj.getAbsolutePath());
-            System.out.println("Writeable: " + myObj.canWrite());
-            System.out.println("Readable " + myObj.canRead());
-            System.out.println("File size in bytes " + myObj.length());
+    // troubleshooting method to check input file information and validity
+    public void getFileInfo(File inputFile) {
+        if (inputFile.exists()) {
+            System.out.println("File name: " + inputFile.getName());
+            System.out.println("Absolute path: " + inputFile.getAbsolutePath());
+            System.out.println("Writeable: " + inputFile.canWrite());
+            System.out.println("Readable " + inputFile.canRead());
+            System.out.println("File size in bytes " + inputFile.length());
         } else {
             System.out.println("The file does not exist.");
         }
