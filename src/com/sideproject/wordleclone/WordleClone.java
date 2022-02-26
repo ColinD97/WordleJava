@@ -12,7 +12,7 @@ public class WordleClone {
     private List<String> wordList;
 
     public WordleClone(){
-        this.wordList = null;
+        this.wordList = new ArrayList<>();
     }
 
     public static void main(String[] args) {
@@ -22,15 +22,13 @@ public class WordleClone {
     }
 
     private void run(){
-        //String inputFileLocation = "\\database\\word-list.txt";
-        String inputFileLocation = "word-list.txt";
-
+        String inputFileLocation = "database\\word-list.txt";
         File inputFile = new File(inputFileLocation);
-        //loadWords(inputFile);
+        loadWords(inputFile);
         displayApplicationBanner();
         displayMainMenu();
         String guess = "wordle";
-        printBoard(guess);
+        printBoard(randomWord());
         getFileInfo();
 
 
@@ -39,20 +37,17 @@ public class WordleClone {
     }
 
     private void loadWords(File inputFile){
-        //List<String> wordList = new ArrayList<>();
-        //wordList
         try (Scanner textFile = new Scanner(inputFile)){
             int i = 0;
             while (textFile.hasNextLine()){
                 wordList.add(textFile.nextLine());
-                System.out.println(wordList.get(i));
-                System.out.println(i);
+                //System.out.println(wordList.get(i));
+                //System.out.println(i);
                 i++;
             }
         } catch (FileNotFoundException e){
             System.out.println("File not found");
         }
-        //return wordList;
     }
 
     private String randomWord(){
@@ -83,14 +78,9 @@ public class WordleClone {
     private void printBoard(String word){
         word = word.toUpperCase();
         char[] letter = word.toCharArray();
-        //char letter = ' ';
-        System.out.println(" +-+-+-+-+-+-+");
-        System.out.printf(" |%c|%c|%c|%c|%c|%c|\n", letter[0], letter[1], letter[2], letter[3], letter[4], letter[5]);
-        System.out.println(" +-+-+-+-+-+-+");
-
-        //System.out.println("|*| ");
-        //System.out.println("__");
-
+        System.out.println(" +-+-+-+-+-+");
+        System.out.printf(" |%c|%c|%c|%c|%c|\n", letter[0], letter[1], letter[2], letter[3], letter[4]);
+        System.out.println(" +-+-+-+-+-+");
     }
 
     public void getFileInfo() {
