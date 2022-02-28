@@ -10,6 +10,11 @@ public class WordleClone {
     public String answerWord;
     private Map<Character, Letter> alphabet = new HashMap<>();
     private Map<Integer, Character> numberToAlphaMap = new HashMap<>();
+    public static final String GREEN_BOLD = "\033[1;32m";  // GREEN
+    public static final String YELLOW_BOLD = "\033[1;33m"; // YELLOW
+    public static final String PURPLE = "\u001B[45m";  // PURPLE BACKGROUND
+    public static final String DEFAULT = "\\u001B[37m";
+
 
     public WordleClone(){
         this.wordList = new ArrayList<>();
@@ -45,6 +50,7 @@ public class WordleClone {
         for (int i = 0; i < 7; i++) {
             String validGuess = userGuess();
             printBoard(validGuess);
+            printAlphabet();
         }
     }
 
@@ -53,11 +59,7 @@ public class WordleClone {
         boolean isValid = false;
         while (!isValid){
             System.out.print("Enter 5 letter word to guess: ");
-            guess = userInput.nextLine();
-            if (guess.equalsIgnoreCase(answerWord)){
-                System.out.println("YOU WIN!");
-                isValid = true;
-            } else {
+            guess = userInput.nextLine();{
                 for (String word : wordList) {
                     if (word.equalsIgnoreCase(guess)) {
                         isValid = true;
@@ -68,6 +70,29 @@ public class WordleClone {
         }
         return guess;
     }
+
+    // takes in a string and checks each letter to update their fields
+    private void processWord(String word){
+        char[] letters = word.toCharArray();
+        int position = 0;
+        for (char value: letters){
+            Letter currentLetter = alphabet.get(value);
+            if (currentLetter.isInAnswer()){
+                if (currentLetter.getSingleLocation(position) == 1){
+                    currentLetter.setColorCode(Letter.ColorCode.GREEN);
+                } else {
+                    currentLetter.setColorCode(Letter.ColorCode.YELLOW);
+                }
+            }
+            if (!currentLetter.isHasBeenGuessed()){
+                currentLetter.setHasBeenGuessed(true);
+                currentLetter.setColorCode(Letter.ColorCode.GREY);
+            }
+        }
+        position++;
+        //Letter letter = alphabet.get("A");
+    }
+
 
     // takes inputFile and loads words into wordList List
     // wordList is used in game as library of possible words to use and guess
