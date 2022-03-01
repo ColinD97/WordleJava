@@ -10,10 +10,10 @@ public class WordleClone {
     public String answerWord;
     private Map<Character, Letter> alphabet = new HashMap<>();
     private Map<Integer, Character> numberToAlphaMap = new HashMap<>();
-    public static final String GREEN_BOLD = "\033[1;32m";  // GREEN
-    public static final String YELLOW_BOLD = "\033[1;33m"; // YELLOW
-    public static final String PURPLE = "\u001B[45m";  // PURPLE BACKGROUND
-    public static final String DEFAULT = "\\u001B[37m";
+    public static final String GREEN = "\033[0;102m";  // GREEN
+    public static final String YELLOW = "\033[0;103m"; // YELLOW
+    public static final String GREY = "\033[0;105m";  // PURPLE BACKGROUND \033[0;35m    [45m
+    public static final String ANSI_RESET = "\u001B[0m";
 
 
     public WordleClone(){
@@ -48,7 +48,12 @@ public class WordleClone {
         printBoard("*****");
         System.out.println();
         for (int i = 0; i < 7; i++) {
+            System.out.println();
             String validGuess = userGuess();
+            if (processWord(validGuess)){
+                System.out.println("YOU WIN!");
+                break;
+            }
             printBoard(validGuess);
             printAlphabet();
         }
@@ -72,25 +77,29 @@ public class WordleClone {
     }
 
     // takes in a string and checks each letter to update their fields
-    private void processWord(String word){
+    private boolean processWord(String word){
+        word = word.toUpperCase();
         char[] letters = word.toCharArray();
         int position = 0;
-        for (char value: letters){
+        int greenCount = 0;
+        for (char value: letters) {
             Letter currentLetter = alphabet.get(value);
-            if (currentLetter.isInAnswer()){
-                if (currentLetter.getSingleLocation(position) == 1){
+            if (currentLetter.isInAnswer()) {
+                if (currentLetter.getSingleLocation(position) == 1) {
                     currentLetter.setColorCode(Letter.ColorCode.GREEN);
+                    greenCount++;
                 } else {
                     currentLetter.setColorCode(Letter.ColorCode.YELLOW);
                 }
-            }
-            if (!currentLetter.isHasBeenGuessed()){
-                currentLetter.setHasBeenGuessed(true);
-                currentLetter.setColorCode(Letter.ColorCode.GREY);
+            } else {
+                if (!currentLetter.isHasBeenGuessed()) {
+                    currentLetter.setHasBeenGuessed(true);
+                    currentLetter.setColorCode(Letter.ColorCode.GREY);
+                }
+                position++;
             }
         }
-        position++;
-        //Letter letter = alphabet.get("A");
+        return greenCount == 5;
     }
 
 
@@ -113,7 +122,7 @@ public class WordleClone {
     //create Map of Letter class as alphabet to initialize new word
     private void generateAlphabet(){
         int count = 0;
-        char[] allChars = {'Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'};
+        char[] allChars = {'Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M','*'};
         for(char value: allChars){
             Letter newLetter = new Letter(value);
             numberToAlphaMap.put(count, value);
@@ -127,17 +136,61 @@ public class WordleClone {
     private void printAlphabet(){
         System.out.println("Available letters: ");
         for (int i = 0; i < 10; i++) {
-            System.out.print(numberToAlphaMap.get(i)+"  ");
+            switch (alphabet.get(numberToAlphaMap.get(i)).getColorCode() ){
+                case DEFAULT:
+                    System.out.print(ANSI_RESET + numberToAlphaMap.get(i)+"  ");
+                    break;
+                case GREY:
+                    System.out.print(GREY + numberToAlphaMap.get(i)+ANSI_RESET+"  " );
+                    break;
+                case YELLOW:
+                    System.out.print(YELLOW + numberToAlphaMap.get(i)+ANSI_RESET+"  " );
+                    break;
+                case GREEN:
+                    System.out.print(GREEN +numberToAlphaMap.get(i)+ANSI_RESET+"  " );
+            }
+            //System.out.print(numberToAlphaMap.get(i)+"  ");
+            //System.out.print(ANSI_RESET);
         }
         System.out.println();
         for (int i = 10; i < 19; i++) {
-            System.out.print(" "+numberToAlphaMap.get(i)+" ");
+            switch (alphabet.get(numberToAlphaMap.get(i)).getColorCode() ){
+                case DEFAULT:
+                    System.out.print(" "+ANSI_RESET + numberToAlphaMap.get(i)+" ");
+                    break;
+                case GREY:
+                    System.out.print(" "+GREY + numberToAlphaMap.get(i)+ANSI_RESET+" " );
+                    break;
+                case YELLOW:
+                    System.out.print(" "+YELLOW + numberToAlphaMap.get(i)+ANSI_RESET+" " );
+                    break;
+                case GREEN:
+                    System.out.print(" "+GREEN +numberToAlphaMap.get(i)+ANSI_RESET+" " );
+            }
+            //System.out.print(" "+numberToAlphaMap.get(i)+" ");
+            //System.out.print(ANSI_RESET);
+
         }
         System.out.println();
         System.out.print("  ");
         for (int i = 19; i < 26; i++) {
-            System.out.print("  "+numberToAlphaMap.get(i));
+            switch (alphabet.get(numberToAlphaMap.get(i)).getColorCode() ){
+                case DEFAULT:
+                    System.out.print("  "+ANSI_RESET + numberToAlphaMap.get(i));
+                    break;
+                case GREY:
+                    System.out.print("  "+GREY + numberToAlphaMap.get(i)+ANSI_RESET);
+                    break;
+                case YELLOW:
+                    System.out.print("  "+YELLOW + numberToAlphaMap.get(i)+ANSI_RESET);
+                    break;
+                case GREEN:
+                    System.out.print("  "+GREEN +numberToAlphaMap.get(i)+ANSI_RESET);
+            }
+            //System.out.print("  "+numberToAlphaMap.get(i));
+            //System.out.print(ANSI_RESET);
         }
+        System.out.println(ANSI_RESET);
     }
 
 
@@ -206,8 +259,36 @@ public class WordleClone {
         word = word.toUpperCase();
         char[] letter = word.toCharArray();
         System.out.println("       +-+-+-+-+-+");
-        System.out.printf("       |%c|%c|%c|%c|%c|\n", letter[0], letter[1], letter[2], letter[3], letter[4]);
+        //System.out.printf("       |%c|%c|%c|%c|%c|\n", printColoredLetter(letter[0]), letter[1], letter[2], letter[3], letter[4]);
+        System.out.print("       |");
+        printColoredLetter(letter[0]);
+        System.out.print("|");
+        printColoredLetter(letter[1]);
+        System.out.print("|");
+        printColoredLetter(letter[2]);
+        System.out.print("|");
+        printColoredLetter(letter[3]);
+        System.out.print("|");
+        printColoredLetter(letter[4]);
+        System.out.println("|");
+
         System.out.println("       +-+-+-+-+-+");
+    }
+
+    private void printColoredLetter(char letter){
+        switch (alphabet.get(letter).getColorCode() ){
+            case DEFAULT:
+                System.out.print(ANSI_RESET + alphabet.get(letter));
+                break;
+            case GREY:
+                System.out.print(GREY + alphabet.get(letter) + ANSI_RESET);
+                break;
+            case YELLOW:
+                System.out.print(YELLOW + alphabet.get(letter) + ANSI_RESET);
+                break;
+            case GREEN:
+                System.out.print(GREEN + alphabet.get(letter) + ANSI_RESET);
+        }
     }
 
     // troubleshooting method to check input file information and validity
