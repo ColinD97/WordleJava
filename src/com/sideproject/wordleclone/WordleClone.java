@@ -10,6 +10,7 @@ public class WordleClone {
     public String answerWord;
     private Map<Character, Letter> alphabet = new HashMap<>();
     private Map<Integer, Character> numberToAlphaMap = new HashMap<>();
+    private String[] pastGuesses = {"     ", "     ", "     ", "     ", "     ", "     "};
     public static final String GREEN = "\033[0;102m";  // GREEN
     public static final String YELLOW = "\033[0;103m"; // YELLOW
     public static final String GREY = "\033[0;105m";  // PURPLE BACKGROUND \033[0;35m    [45m
@@ -41,20 +42,21 @@ public class WordleClone {
 
     //game logic loop
     private void playGame(){
-        printAlphabet();
 
         System.out.println();
         System.out.println();
-        printBoard("*****");
+        printBoard(pastGuesses);
+        printAlphabet();
         System.out.println();
         for (int i = 0; i < 7; i++) {
             System.out.println();
-            String validGuess = userGuess();
-            if (processWord(validGuess)){
+            //String validGuess = userGuess();
+            pastGuesses[i] = userGuess();
+            if (processWord(pastGuesses[i])){
                 System.out.println("YOU WIN!");
                 break;
             }
-            printBoard(validGuess);
+            printBoard(pastGuesses);
             printAlphabet();
         }
     }
@@ -122,7 +124,7 @@ public class WordleClone {
     //create Map of Letter class as alphabet to initialize new word
     private void generateAlphabet(){
         int count = 0;
-        char[] allChars = {'Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M','*'};
+        char[] allChars = {'Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M',' '};
         for(char value: allChars){
             Letter newLetter = new Letter(value);
             numberToAlphaMap.put(count, value);
@@ -255,7 +257,13 @@ public class WordleClone {
         }
         }
 
-    private void printBoard(String word){
+        private void printBoard(String[] words){
+            for (int i = 0; i < words.length; i++) {
+                printBoardRow(words[i]);
+            }
+             }
+
+    private void printBoardRow(String word){
         word = word.toUpperCase();
         char[] letter = word.toCharArray();
         System.out.println("       +-+-+-+-+-+");
@@ -274,6 +282,7 @@ public class WordleClone {
 
         System.out.println("       +-+-+-+-+-+");
     }
+
 
     private void printColoredLetter(char letter){
         switch (alphabet.get(letter).getColorCode() ){
