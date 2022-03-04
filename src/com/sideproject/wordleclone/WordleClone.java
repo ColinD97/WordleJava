@@ -6,11 +6,7 @@ import java.util.*;
 
 public class WordleClone {
     private Scanner userInput = new Scanner(System.in);
-    private List<String> wordList;
-    public String answerWord;
-    private Map<Character, Letter> alphabet = new HashMap<>();
-    private Map<Integer, Character> numberToAlphaMap = new HashMap<>();
-    private String[] pastGuesses = {"     ", "     ", "     ", "     ", "     ", "     "};
+    private GameLogic gameLogic;
     public static final String GREEN = "\033[0;102m";  // GREEN
     public static final String YELLOW = "\033[0;103m"; // YELLOW
     public static final String GREY = "\033[0;105m";  // PURPLE BACKGROUND \033[0;35m    [45m
@@ -18,41 +14,33 @@ public class WordleClone {
 
 
     public WordleClone(){
-        this.wordList = new ArrayList<>();
-        generateAlphabet();
-        String inputFileLocation = "database\\word-list.txt";
-        File inputFile = new File(inputFileLocation);
-        loadWords(inputFile);
-        this.answerWord = randomWord();
+       gameLogic = new GameLogic();
     }
 
     public static void main(String[] args) {
         WordleClone application = new WordleClone();
         application.run();
-
     }
 
     private void run(){
-
         displayApplicationBanner();
         displayMainMenu();
-        //getFileInfo(inputFile);
         userInput.close();
     }
 
     //game logic loop
     private void playGame(){
-
         System.out.println();
         System.out.println();
+        String[] pastGuesses = gameLogic.getPastGuesses();
         printBoard(pastGuesses);
         printAlphabet();
         System.out.println();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 6; i++) {
             System.out.println();
             //String validGuess = userGuess();
             pastGuesses[i] = userGuess();
-            if (processWord(pastGuesses[i])){
+            if (gameLogic.processWord(pastGuesses[i])){
                 System.out.println("YOU WIN!");
                 break;
             }
@@ -67,7 +55,7 @@ public class WordleClone {
         while (!isValid){
             System.out.print("Enter 5 letter word to guess: ");
             guess = userInput.nextLine();{
-                for (String word : wordList) {
+                for (String word : gameLogic.getWordList()) {
                     if (word.equalsIgnoreCase(guess)) {
                         isValid = true;
                         break;
@@ -78,65 +66,16 @@ public class WordleClone {
         return guess;
     }
 
-    // takes in a string and checks each letter to update their fields
-    private boolean processWord(String word){
-        word = word.toUpperCase();
-        char[] letters = word.toCharArray();
-        int position = 0;
-        int greenCount = 0;
-        for (char value: letters) {
-            Letter currentLetter = alphabet.get(value);
-            if (currentLetter.isInAnswer()) {
-                if (currentLetter.getSingleLocation(position) == 1) {
-                    currentLetter.setColorCode(Letter.ColorCode.GREEN);
-                    greenCount++;
-                } else {
-                    currentLetter.setColorCode(Letter.ColorCode.YELLOW);
-                }
-            } else {
-                if (!currentLetter.isHasBeenGuessed()) {
-                    currentLetter.setHasBeenGuessed(true);
-                    currentLetter.setColorCode(Letter.ColorCode.GREY);
-                }
-                position++;
-            }
-        }
-        return greenCount == 5;
-    }
 
 
-    // takes inputFile and loads words into wordList List
-    // wordList is used in game as library of possible words to use and guess
-    private void loadWords(File inputFile){
-        try (Scanner textFile = new Scanner(inputFile)){
-            int i = 0;
-            while (textFile.hasNextLine()){
-                wordList.add(textFile.nextLine());
-                //System.out.println(wordList.get(i));
-                //System.out.println(i);
-                i++;
-            }
-        } catch (FileNotFoundException e){
-            System.out.println("File not found");
-        }
-    }
 
-    //create Map of Letter class as alphabet to initialize new word
-    private void generateAlphabet(){
-        int count = 0;
-        char[] allChars = {'Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M',' '};
-        for(char value: allChars){
-            Letter newLetter = new Letter(value);
-            numberToAlphaMap.put(count, value);
-            alphabet.put(value, newLetter);
-            count++;
-        }
-    }
 
     //print available letters color coded to not used/ in word / in position
     //print before every guess
     private void printAlphabet(){
         System.out.println("Available letters: ");
+        Map<Character, Letter> alphabet = gameLogic.getAlphabet();
+        Map<Integer, Character> numberToAlphaMap = gameLogic.getNumberToAlphaMap();
         for (int i = 0; i < 10; i++) {
             switch (alphabet.get(numberToAlphaMap.get(i)).getColorCode() ){
                 case DEFAULT:
@@ -171,7 +110,6 @@ public class WordleClone {
             }
             //System.out.print(" "+numberToAlphaMap.get(i)+" ");
             //System.out.print(ANSI_RESET);
-
         }
         System.out.println();
         System.out.print("  ");
@@ -196,28 +134,7 @@ public class WordleClone {
     }
 
 
-    // picks random location in string list to be the word to guess
-    private String randomWord(){
-        Random random = new Random();
-        answerWord = wordList.get(random.nextInt(wordList.size()));
-        answerWord = answerWord.toUpperCase();
-        char[] letters = answerWord.toCharArray();
-//        for (int i = 0; i < 6; i++) {
-//            char tempChar = numberToAlphaMap.get(i);
-//            Letter letter = alphabet.get(tempChar);
-//            letter.setInAnswer(true);
-//            System.out.println("Letter "+letter+" is in answer");
-//        }
-        int position = 0;
-        for(char value: letters){
-            Letter letter = alphabet.get(value);
-            letter.setInAnswer(true);
-            letter.setLetterLocations(position);
-            System.out.println("Letter "+value+" is in answer");
-            position++;
-        }
-        return answerWord;
-    }
+
 
     private void displayApplicationBanner(){
         System.out.println();
@@ -285,6 +202,7 @@ public class WordleClone {
 
 
     private void printColoredLetter(char letter){
+        Map<Character, Letter> alphabet = gameLogic.getAlphabet();
         switch (alphabet.get(letter).getColorCode() ){
             case DEFAULT:
                 System.out.print(ANSI_RESET + alphabet.get(letter));
@@ -297,19 +215,6 @@ public class WordleClone {
                 break;
             case GREEN:
                 System.out.print(GREEN + alphabet.get(letter) + ANSI_RESET);
-        }
-    }
-
-    // troubleshooting method to check input file information and validity
-    public void getFileInfo(File inputFile) {
-        if (inputFile.exists()) {
-            System.out.println("File name: " + inputFile.getName());
-            System.out.println("Absolute path: " + inputFile.getAbsolutePath());
-            System.out.println("Writeable: " + inputFile.canWrite());
-            System.out.println("Readable " + inputFile.canRead());
-            System.out.println("File size in bytes " + inputFile.length());
-        } else {
-            System.out.println("The file does not exist.");
         }
     }
 
