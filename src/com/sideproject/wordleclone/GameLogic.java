@@ -11,6 +11,15 @@ public class GameLogic {
     private Map<Character, Letter> alphabet = new HashMap<>();
     private Map<Integer, Character> numberToAlphaMap = new HashMap<>();
     private String[] pastGuesses = {"     ", "     ", "     ", "     ", "     ", "     "};
+//    private Letter[][] pastWordsArray = new Letter[][]{
+//            new Letter[] {new Letter(' '), new Letter(' '), new Letter(' '), new Letter(' '), new Letter(' ')},
+//            new Letter[] {new Letter(' '), new Letter(' '), new Letter(' '), new Letter(' '), new Letter(' ')},
+//            new Letter[] {new Letter(' '), new Letter(' '), new Letter(' '), new Letter(' '), new Letter(' ')},
+//            new Letter[] {new Letter(' '), new Letter(' '), new Letter(' '), new Letter(' '), new Letter(' ')},
+//            new Letter[] {new Letter(' '), new Letter(' '), new Letter(' '), new Letter(' '), new Letter(' ')},
+//            new Letter[] {new Letter(' '), new Letter(' '), new Letter(' '), new Letter(' '), new Letter(' ')},
+//    };
+    private List<List<Letter>> pastWords;
     String inputFileLocation = "database\\word-list.txt";
 
 
@@ -25,7 +34,15 @@ public class GameLogic {
         this.numberToAlphaMap = numberToAlphaMap;
         this.pastGuesses = pastGuesses;
         answerWord = randomWord();
-    }
+        setPastWords();
+
+        }
+
+    
+
+
+
+
 
     public List<String> getWordList() {
         return wordList;
@@ -83,6 +100,16 @@ public class GameLogic {
 
     public void setPastGuesses(String[] pastGuesses) {
         this.pastGuesses = pastGuesses;
+    }
+
+    public void setPastWords() {
+        //this.pastWords = pastWords;
+        pastWords.add(new ArrayList<>(6));
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
+                pastWords.get(i).add(j, new Letter(' '));
+            }
+        }
     }
 
     // picks random location in string list to be the word to guess
