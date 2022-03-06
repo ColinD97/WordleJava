@@ -12,13 +12,33 @@ public class GameLogicAlternate {
     private Map<Integer, Character> numberToAlphaMap = new HashMap<>();
     private final List<String> wordList;
     String inputFileLocation = "database\\word-list.txt";
+    private List<Letter> wordSlot0 = new ArrayList<>();
+    private List<Letter> wordSlot1 = new ArrayList<>();
+    private List<Letter> wordSlot2 = new ArrayList<>();
+    private List<Letter> wordSlot3 = new ArrayList<>();
+    private List<Letter> wordSlot4 = new ArrayList<>();
+    private List<Letter> wordSlot5 = new ArrayList<>();
+    private List<List<Letter>> listOfPastGuesses = new ArrayList<>();
+
 
     public GameLogicAlternate() {
         wordList = new ArrayList<>();
         File inputFile = new File(inputFileLocation);
         setWordList(inputFile);
-        answerWord = randomWord();
         setAlphabet();
+        answerWord = randomWord();
+        wordSlot0 = setBlanks(wordSlot0);
+        wordSlot1 = setBlanks(wordSlot1);
+        wordSlot2 = setBlanks(wordSlot2);
+        wordSlot3 = setBlanks(wordSlot3);
+        wordSlot4 = setBlanks(wordSlot4);
+        wordSlot5 = setBlanks(wordSlot5);
+        //listOfPastGuesses.add(wordSlot0);
+        //listOfPastGuesses = new ArrayList<>()
+        for (List<Letter> letters : (Arrays.asList(wordSlot0, wordSlot1, wordSlot2, wordSlot3, wordSlot4, wordSlot5))) {
+            listOfPastGuesses.add(letters);
+        }
+
     }
 
     private void setWordList(File input) {
@@ -58,6 +78,22 @@ public class GameLogicAlternate {
             numberToAlphaMap.put(count, value);
             alphabet.put(value, newLetter);
             count++;
+        }
+    }
+
+    private List<Letter> setBlanks(List<Letter> word){
+        for (int i = 0; i < 5; i++) {
+            word.add(new Letter(' '));
+        }
+        return word;
+    }
+
+    public void testPrint() {
+        for (List<Letter> word: listOfPastGuesses) {
+            for(Letter letter: word){
+                System.out.print(letter+ "_");
+            }
+            System.out.println();
         }
     }
 

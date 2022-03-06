@@ -7,6 +7,7 @@ import java.util.*;
 public class WordleClone {
     private Scanner userInput = new Scanner(System.in);
     private GameLogic gameLogic;
+    private GameLogicAlternate gameLogicAlternate;
     private DisplayBoard displayBoard;
     public static final String GREEN = "\033[0;102m";  // GREEN
     public static final String YELLOW = "\033[0;103m"; // YELLOW
@@ -16,6 +17,7 @@ public class WordleClone {
 
     public WordleClone() {
         gameLogic = new GameLogic();
+        gameLogicAlternate = new GameLogicAlternate();
         displayBoard = new DisplayBoard(gameLogic.getAlphabet());
     }
 
@@ -25,6 +27,7 @@ public class WordleClone {
     }
 
     private void run() {
+        gameLogicAlternate.testPrint();
         displayApplicationBanner();
         displayMainMenu();
         userInput.close();
