@@ -38,7 +38,7 @@ public class GameLogic {
 
         }
 
-    
+
 
 
 
@@ -103,13 +103,13 @@ public class GameLogic {
     }
 
     public void setPastWords() {
-        //this.pastWords = pastWords;
-        pastWords.add(new ArrayList<>(6));
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 5; j++) {
-                pastWords.get(i).add(j, new Letter(' '));
-            }
-        }
+        this.pastWords = pastWords;
+//        pastWords.add(new ArrayList<>(6));
+//        for (int i = 0; i < 6; i++) {
+//            for (int j = 0; j < 5; j++) {
+//                pastWords.get(i).add(j, new Letter(' '));
+//            }
+//        }
     }
 
     // picks random location in string list to be the word to guess
@@ -142,7 +142,7 @@ public class GameLogic {
                 if (currentLetter.getSingleLocation(position) == 1) {
                     currentLetter.setColorCode(Letter.ColorCode.GREEN);
                     greenCount++;
-                } else {
+                } else if(!currentLetter.getColorCode().equals(Letter.ColorCode.GREEN)){
                     currentLetter.setColorCode(Letter.ColorCode.YELLOW);
                 }
             } else {
@@ -150,8 +150,8 @@ public class GameLogic {
                     currentLetter.setHasBeenGuessed(true);
                     currentLetter.setColorCode(Letter.ColorCode.GREY);
                 }
-                position++;
             }
+            position++;
         }
         return greenCount == 5;
     }
