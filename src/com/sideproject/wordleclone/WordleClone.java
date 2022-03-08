@@ -6,7 +6,7 @@ import java.util.*;
 
 public class WordleClone {
     private Scanner userInput = new Scanner(System.in);
-    private GameLogic gameLogic;
+    //private GameLogic gameLogic;
     private GameLogicAlternate gameLogicAlternate;
     private DisplayBoard displayBoard;
     public static final String GREEN = "\033[0;102m";  // GREEN
@@ -16,9 +16,9 @@ public class WordleClone {
 
 
     public WordleClone() {
-        gameLogic = new GameLogic();
+        //gameLogic = new GameLogic();
         gameLogicAlternate = new GameLogicAlternate();
-        displayBoard = new DisplayBoard(gameLogic.getAlphabet());
+        displayBoard = new DisplayBoard(gameLogicAlternate.getAlphabet());
     }
 
     public static void main(String[] args) {
@@ -80,7 +80,7 @@ public class WordleClone {
             System.out.print("Enter 5 letter word to guess: ");
             guess = userInput.nextLine();
             {
-                for (String word : gameLogic.getWordList()) {
+                for (String word : gameLogicAlternate.getWordList()) {
                     if (word.equalsIgnoreCase(guess)) {
                         isValid = true;
                         break;
@@ -119,8 +119,8 @@ public class WordleClone {
     //print before every guess
     private void printAlphabet() {
         System.out.println("Available letters: ");
-        Map<Character, Letter> alphabet = gameLogic.getAlphabet();
-        Map<Integer, Character> numberToAlphaMap = gameLogic.getNumberToAlphaMap();
+        Map<Character, Letter> alphabet = gameLogicAlternate.getAlphabet();
+        Map<Integer, Character> numberToAlphaMap = gameLogicAlternate.getNumberToAlphaMap();
         for (int i = 0; i < 10; i++) {
             switch (alphabet.get(numberToAlphaMap.get(i)).getColorCode()) {
                 case DEFAULT:

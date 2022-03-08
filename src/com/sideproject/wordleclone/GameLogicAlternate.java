@@ -109,7 +109,17 @@ public class GameLogicAlternate {
         }
     }
 
+    public Map<Character, Letter> getAlphabet() {
+        return alphabet;
+    }
 
+    public Map<Integer, Character> getNumberToAlphaMap() {
+        return numberToAlphaMap;
+    }
+
+    public List<String> getWordList() {
+        return wordList;
+    }
 
     public void testPrint() {
         for (List<Letter> word: listOfPastGuesses) {
