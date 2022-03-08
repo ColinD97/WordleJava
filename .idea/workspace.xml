@@ -6,9 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="2d1f6c30-d8c8-48b6-854b-3b3d6a284e62" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/WordleJava/com/sideproject/wordleclone/GameLogicAlternate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/WordleJava/com/sideproject/wordleclone/DisplayBoard$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/WordleJava/com/sideproject/wordleclone/DisplayBoard.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/WordleJava/com/sideproject/wordleclone/DisplayBoard.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/WordleJava/com/sideproject/wordleclone/GameLogicAlternate.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/WordleJava/com/sideproject/wordleclone/GameLogicAlternate.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/WordleJava/com/sideproject/wordleclone/WordleClone$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/WordleJava/com/sideproject/wordleclone/WordleClone$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/WordleJava/com/sideproject/wordleclone/WordleClone.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/WordleJava/com/sideproject/wordleclone/WordleClone.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/sideproject/wordleclone/DisplayBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/sideproject/wordleclone/DisplayBoard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/sideproject/wordleclone/GameLogicAlternate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/sideproject/wordleclone/GameLogicAlternate.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/sideproject/wordleclone/WordleClone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/sideproject/wordleclone/WordleClone.java" afterDir="false" />
     </list>

@@ -33,29 +33,47 @@ public class WordleClone {
         userInput.close();
     }
 
-    //game logic loop
-    private void playGame() {
+    //game logic loop - OLD
+//    private void playGame() {
+//        System.out.println();
+//        System.out.println();
+//        String[] pastGuesses = gameLogic.getPastGuesses();
+//        displayBoard.printBoard(pastGuesses);
+//        printAlphabet();
+//        System.out.println();
+//        for (int i = 0; i < 6; i++) {
+//            System.out.println();
+//            pastGuesses[i] = userGuess();
+//            if (gameLogic.processWord(pastGuesses[i])) {
+//                displayBoard.printBoard(pastGuesses);
+//                System.out.println("YOU WIN!");
+//                break;
+//            }
+//            displayBoard.printBoard(pastGuesses);
+//            printAlphabet();
+//        }
+//    }
+
+
+    private void playGame(){
         System.out.println();
         System.out.println();
-        String[] pastGuesses = gameLogic.getPastGuesses();
-        displayBoard.printBoard(pastGuesses);
+        List<List<Letter>> listOfGuesses = gameLogicAlternate.getListOfPastGuesses();
+        displayBoard.sendListOfWordsToPrint(listOfGuesses);
         printAlphabet();
         System.out.println();
         for (int i = 0; i < 6; i++) {
             System.out.println();
-            //String validGuess = userGuess();
-            pastGuesses[i] = userGuess();
-            if (gameLogic.processWord(pastGuesses[i])) {
-                displayBoard.printBoard(pastGuesses);
-                System.out.println("YOU WIN!");
-                break;
-            }
-            displayBoard.printBoard(pastGuesses);
+            List<Letter> userWord = userGuess();
+            gameLogicAlternate.setGuessOnList(i, userWord);
+            displayBoard.sendListOfWordsToPrint(listOfGuesses);
             printAlphabet();
         }
+
     }
 
-    private String userGuess() {
+    private List<Letter> userGuess(){
+        List<Letter> userWord = new ArrayList<>();
         String guess = "";
         boolean isValid = false;
         while (!isValid) {
@@ -70,8 +88,31 @@ public class WordleClone {
                 }
             }
         }
-        return guess;
+        guess = guess.toUpperCase();
+        for (int i = 0; i < guess.length(); i++) {
+            Letter letter = new Letter(guess.charAt(i));
+            userWord.add(letter);
+        }
+        return userWord;
     }
+
+//    private String userGuess() {
+//        String guess = "";
+//        boolean isValid = false;
+//        while (!isValid) {
+//            System.out.print("Enter 5 letter word to guess: ");
+//            guess = userInput.nextLine();
+//            {
+//                for (String word : gameLogic.getWordList()) {
+//                    if (word.equalsIgnoreCase(guess)) {
+//                        isValid = true;
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//        return guess;
+//    }
 
 
     //print available letters color coded to not used/ in word / in position

@@ -35,9 +35,7 @@ public class GameLogicAlternate {
         wordSlot5 = setBlanks(wordSlot5);
         //listOfPastGuesses.add(wordSlot0);
         //listOfPastGuesses = new ArrayList<>()
-        for (List<Letter> letters : (Arrays.asList(wordSlot0, wordSlot1, wordSlot2, wordSlot3, wordSlot4, wordSlot5))) {
-            listOfPastGuesses.add(letters);
-        }
+        listOfPastGuesses.addAll((Arrays.asList(wordSlot0, wordSlot1, wordSlot2, wordSlot3, wordSlot4, wordSlot5)));
 
     }
 
@@ -87,6 +85,31 @@ public class GameLogicAlternate {
         }
         return word;
     }
+
+    public List<List<Letter>> getListOfPastGuesses() {
+        return listOfPastGuesses;
+    }
+
+    public void setGuessOnList(int i, List<Letter> word) {
+        listOfPastGuesses.set(i, word);
+    }
+
+    public void processWordLetters(String matchWord, List<Letter> rowSlotWord) {
+        matchWord = matchWord.toUpperCase();
+        char[] singleChars = matchWord.toCharArray();
+        for (int i = 0; i < 5; i++) {
+            Letter letter = alphabet.get(i);
+            if (singleChars[i] == letter.getLetterChar()){
+                rowSlotWord.get(i).setColorCode(Letter.ColorCode.GREEN);
+            } else if (letter.isInAnswer()){
+                rowSlotWord.get(i).setColorCode(Letter.ColorCode.YELLOW);
+            } else {
+                rowSlotWord.get(i).setColorCode(Letter.ColorCode.GREY);
+            }
+        }
+    }
+
+
 
     public void testPrint() {
         for (List<Letter> word: listOfPastGuesses) {

@@ -1,6 +1,7 @@
 package com.sideproject.wordleclone;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DisplayBoard {
@@ -16,49 +17,66 @@ public class DisplayBoard {
         this.alphabet = alphabet;
     }
 
-    public void printBoard(String[] words){
-        for (int i = 0; i < words.length; i++) {
-            printBoardRow(words[i]);
+    public void sendListOfWordsToPrint(List<List<Letter>> listOfPastGuesses){
+        for (List<Letter> singleGuess: listOfPastGuesses){
+            printBoardRowWord(singleGuess);
         }
     }
 
-    private void printBoardRow(String word){
-        word = word.toUpperCase();
-        char[] letter = word.toCharArray();
+    private void printBoardRowWord(List<Letter> word) {
+        char[] wordAsChar = new char[word.size()];
+        for (int i = 0; i < word.size(); i++) {
+            Letter temp = word.get(i);
+            wordAsChar[i] = temp.getLetterChar();
+            }
         System.out.println("       +-+-+-+-+-+");
-        //System.out.printf("       |%c|%c|%c|%c|%c|\n", printColoredLetter(letter[0]), letter[1], letter[2], letter[3], letter[4]);
-        System.out.print("       |");
-        printColoredLetter(letter[0]);
-        System.out.print("|");
-        printColoredLetter(letter[1]);
-        System.out.print("|");
-        printColoredLetter(letter[2]);
-        System.out.print("|");
-        printColoredLetter(letter[3]);
-        System.out.print("|");
-        printColoredLetter(letter[4]);
-        System.out.println("|");
-
+        System.out.printf("       |%c|%c|%c|%c|%c|\n", wordAsChar[0], wordAsChar[1], wordAsChar[2], wordAsChar[3], wordAsChar[4]);
         System.out.println("       +-+-+-+-+-+");
     }
 
+//    public void printBoard(String[] words){
+//        for (int i = 0; i < words.length; i++) {
+//            printBoardRow(words[i]);
+//        }
+//    }
 
-    private void printColoredLetter(char letter){
-        //Map<Character, Letter> alphabet = gameLogic.getAlphabet();
-        switch (alphabet.get(letter).getColorCode() ){
-            case DEFAULT:
-                System.out.print(ANSI_RESET + alphabet.get(letter));
-                break;
-            case GREY:
-                System.out.print(GREY + alphabet.get(letter) + ANSI_RESET);
-                break;
-            case YELLOW:
-                System.out.print(YELLOW + alphabet.get(letter) + ANSI_RESET);
-                break;
-            case GREEN:
-                System.out.print(GREEN + alphabet.get(letter) + ANSI_RESET);
-        }
-    }
+
+//    private void printBoardRow(String word){
+//        word = word.toUpperCase();
+//        char[] letter = word.toCharArray();
+//        System.out.println("       +-+-+-+-+-+");
+//        //System.out.printf("       |%c|%c|%c|%c|%c|\n", printColoredLetter(letter[0]), letter[1], letter[2], letter[3], letter[4]);
+//        System.out.print("       |");
+//        printColoredLetter(letter[0]);
+//        System.out.print("|");
+//        printColoredLetter(letter[1]);
+//        System.out.print("|");
+//        printColoredLetter(letter[2]);
+//        System.out.print("|");
+//        printColoredLetter(letter[3]);
+//        System.out.print("|");
+//        printColoredLetter(letter[4]);
+//        System.out.println("|");
+//        System.out.println("       +-+-+-+-+-+");
+//    }
+//
+//
+//    private void printColoredLetter(char letter){
+//        //Map<Character, Letter> alphabet = gameLogic.getAlphabet();
+//        switch (alphabet.get(letter).getColorCode() ){
+//            case DEFAULT:
+//                System.out.print(ANSI_RESET + alphabet.get(letter));
+//                break;
+//            case GREY:
+//                System.out.print(GREY + alphabet.get(letter) + ANSI_RESET);
+//                break;
+//            case YELLOW:
+//                System.out.print(YELLOW + alphabet.get(letter) + ANSI_RESET);
+//                break;
+//            case GREEN:
+//                System.out.print(GREEN + alphabet.get(letter) + ANSI_RESET);
+//        }
+//    }
 
 }
 
