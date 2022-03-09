@@ -94,17 +94,24 @@ public class GameLogicAlternate {
         listOfPastGuesses.set(i, word);
     }
 
-    public void processWordLetters(String matchWord, List<Letter> rowSlotWord) {
-        matchWord = matchWord.toUpperCase();
-        char[] singleChars = matchWord.toCharArray();
+    public void processWordLetters(List<Letter> rowSlotWord) {
         for (int i = 0; i < 5; i++) {
-            Letter letter = alphabet.get(i);
-            if (singleChars[i] == letter.getLetterChar()){
-                rowSlotWord.get(i).setColorCode(Letter.ColorCode.GREEN);
-            } else if (letter.isInAnswer()){
-                rowSlotWord.get(i).setColorCode(Letter.ColorCode.YELLOW);
+            Letter currentLetter = rowSlotWord.get(i);
+            char currentChar = currentLetter.getLetterChar();
+            Letter alphabetLetter = alphabet.get(currentChar);
+            if (alphabetLetter.isInAnswer()){
+                if(alphabetLetter.getSingleLocation(i) == 1) {
+                    currentLetter.setColorCode(Letter.ColorCode.GREEN);
+                    alphabetLetter.setColorCode(Letter.ColorCode.GREEN);
+                } else {
+                    currentLetter.setColorCode(Letter.ColorCode.YELLOW);
+                    if (!alphabetLetter.getColorCode().equals(Letter.ColorCode.GREEN)){
+                        alphabetLetter.setColorCode(Letter.ColorCode.YELLOW);
+                    }
+                }
             } else {
-                rowSlotWord.get(i).setColorCode(Letter.ColorCode.GREY);
+                currentLetter.setColorCode(Letter.ColorCode.GREY);
+                alphabetLetter.setColorCode(Letter.ColorCode.GREY);
             }
         }
     }

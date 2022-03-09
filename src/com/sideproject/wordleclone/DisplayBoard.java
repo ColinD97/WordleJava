@@ -44,6 +44,7 @@ public class DisplayBoard {
         System.out.println("       +-+-+-+-+-+");
     }
 
+    // TODO get colors to work again - maybe not being processed correctly?
     private void printColoredLetter(Letter letter){
         switch (letter.getColorCode() ){
             case DEFAULT:

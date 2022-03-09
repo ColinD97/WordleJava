@@ -66,6 +66,7 @@ public class WordleClone {
             System.out.println();
             List<Letter> userWord = userGuess();
             gameLogicAlternate.setGuessOnList(i, userWord);
+            gameLogicAlternate.processWordLetters(userWord);
             displayBoard.sendListOfWordsToPrint(listOfGuesses);
             printAlphabet();
         }
