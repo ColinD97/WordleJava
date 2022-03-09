@@ -27,7 +27,7 @@ public class WordleClone {
     }
 
     private void run() {
-        gameLogicAlternate.testPrint();
+        System.out.println("*** "+gameLogicAlternate.getAnswerWord()+" ***");
         displayApplicationBanner();
         displayMainMenu();
         userInput.close();
@@ -65,10 +65,19 @@ public class WordleClone {
         for (int i = 0; i < 6; i++) {
             System.out.println();
             List<Letter> userWord = userGuess();
+            String stringUserWord = gameLogicAlternate.convertListWordToString(userWord);
             gameLogicAlternate.setGuessOnList(i, userWord);
             gameLogicAlternate.processWordLetters(userWord);
             displayBoard.sendListOfWordsToPrint(listOfGuesses);
             printAlphabet();
+            if (stringUserWord.equalsIgnoreCase(gameLogicAlternate.getAnswerWord())){
+                System.out.println("*** YOU WIN ***");
+                System.out.println();
+                //displayMainMenu();
+                // TODO going back to main menu resets game
+                // instantiates new gamelogic?
+                break;
+            }
         }
 
     }
@@ -97,23 +106,7 @@ public class WordleClone {
         return userWord;
     }
 
-//    private String userGuess() {
-//        String guess = "";
-//        boolean isValid = false;
-//        while (!isValid) {
-//            System.out.print("Enter 5 letter word to guess: ");
-//            guess = userInput.nextLine();
-//            {
-//                for (String word : gameLogic.getWordList()) {
-//                    if (word.equalsIgnoreCase(guess)) {
-//                        isValid = true;
-//                        break;
-//                    }
-//                }
-//            }
-//        }
-//        return guess;
-//    }
+
 
 
     //print available letters color coded to not used/ in word / in position

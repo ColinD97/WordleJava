@@ -50,7 +50,6 @@ public class Letter {
 
     public void setLetterLocations(int position) {
         letterLocations[position] = 1;
-        System.out.println("Position: " + position);
     }
 
     public ColorCode getColorCode() {

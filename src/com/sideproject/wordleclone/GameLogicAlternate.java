@@ -33,10 +33,12 @@ public class GameLogicAlternate {
         wordSlot3 = setBlanks(wordSlot3);
         wordSlot4 = setBlanks(wordSlot4);
         wordSlot5 = setBlanks(wordSlot5);
-        //listOfPastGuesses.add(wordSlot0);
-        //listOfPastGuesses = new ArrayList<>()
         listOfPastGuesses.addAll((Arrays.asList(wordSlot0, wordSlot1, wordSlot2, wordSlot3, wordSlot4, wordSlot5)));
 
+    }
+
+    public String getAnswerWord() {
+        return answerWord;
     }
 
     private void setWordList(File input) {
@@ -62,7 +64,7 @@ public class GameLogicAlternate {
             Letter letter = alphabet.get(value);
             letter.setInAnswer(true);
             letter.setLetterLocations(position);
-            System.out.println("Letter "+value+" is in answer");
+            //System.out.println("Letter "+value+" is in answer");
             position++;
         }
         return answerWord;
@@ -128,13 +130,12 @@ public class GameLogicAlternate {
         return wordList;
     }
 
-    public void testPrint() {
-        for (List<Letter> word: listOfPastGuesses) {
-            for(Letter letter: word){
-                System.out.print(letter+ "_");
-            }
-            System.out.println();
+    public String convertListWordToString(List<Letter> listWord){
+        String stringWord = "";
+        for (Letter letter: listWord){
+            stringWord += letter.getLetterChar();
         }
+        return stringWord;
     }
 
 
