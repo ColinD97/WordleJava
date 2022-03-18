@@ -40,6 +40,7 @@ public class GameLogicAlternate {
         return answerWord;
     }
 
+    // reads words from txt file to List<String>
     private void setWordList(File input) {
         try (Scanner textFile = new Scanner(input)){
             int i = 0;
@@ -68,6 +69,7 @@ public class GameLogicAlternate {
         return answerWord;
     }
 
+    // currently sets order of alphabet to QWERTY to aid display
     private void setAlphabet() {
         int count = 0;
         char[] allChars = {'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ' '};
@@ -91,9 +93,12 @@ public class GameLogicAlternate {
     }
 
     public void setGuessOnList(int i, List<Letter> word) {
+        processWordLetters(word);
         listOfPastGuesses.set(i, word);
     }
 
+    // takes in a list of Letters, compares each letter to correct answer,
+    // and sets the color code accordingly
     public void processWordLetters(List<Letter> rowSlotWord) {
         for (int i = 0; i < 5; i++) {
             Letter currentLetter = rowSlotWord.get(i);

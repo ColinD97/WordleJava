@@ -12,6 +12,9 @@ public class WordleClone {
     public static final String YELLOW = "\033[0;103m"; // YELLOW
     public static final String GREY = "\033[0;105m";  // PURPLE BACKGROUND \033[0;35m
     public static final String ANSI_RESET = "\u001B[0m";
+    public static int gamesPlayed = 0;
+    public static int gamesWon = 0;
+    public static double avgNumGuesses = 0;
 
 
     public static void main(String[] args) {
@@ -39,26 +42,38 @@ public class WordleClone {
         displayBoard.sendListOfWordsToPrint(listOfGuesses);
         printAlphabet();
         System.out.println();
+        boolean win = false;
+        int guessCount = 0;
         for (int i = 0; i < 6; i++) {
+            guessCount++;
             System.out.println();
             List<Letter> userWord = userGuess();
-            String stringUserWord = gameLogicAlternate.convertListWordToString(userWord);
             gameLogicAlternate.setGuessOnList(i, userWord);
-            gameLogicAlternate.processWordLetters(userWord);
             displayBoard.sendListOfWordsToPrint(listOfGuesses);
             printAlphabet();
+            String stringUserWord = gameLogicAlternate.convertListWordToString(userWord);
             if (stringUserWord.equalsIgnoreCase(gameLogicAlternate.getAnswerWord())){
-                System.out.println("*** YOU WIN ***");
                 System.out.println();
-                //displayMainMenu();
-                // TODO going back to main menu resets game
-                // instantiates new gamelogic?
+                win = true;
                 break;
             }
+        }
+        if (win){
+            System.out.println("\n\n   *** YOU WIN!!! ***\n\n");
+            gamesWon++;
+            gamesPlayed++;
+            avgNumGuesses += guessCount;
+        } else {
+            System.out.println("\n\n   *** YOU LOSE! ***");
+            System.out.println("The correct word was: "+ gameLogicAlternate.getAnswerWord());
+            System.out.println();
+            gamesPlayed++;
+            avgNumGuesses += guessCount;
         }
 
     }
 
+    // takes user input and check for valid word that exists in loaded dictionary
     private List<Letter> userGuess(){
         List<Letter> userWord = new ArrayList<>();
         String guess = "";
@@ -144,7 +159,7 @@ public class WordleClone {
 
     private boolean displayMainMenu() {
         System.out.println("1. Play Game");
-        System.out.println("2. Check stats");
+        System.out.println("2. Display Statistics");
         System.out.println("3. Exit");
         boolean isInputCorrect = false;
         while (!isInputCorrect) {
@@ -156,10 +171,12 @@ public class WordleClone {
                     return true;
                 case "2":
                     isInputCorrect = true;
-                    System.out.println("*** Numbers ***");
+                    displayStatistics();
                     break;
                 case "3":
+                    System.out.println();
                     System.out.println("*** Quit ***");
+                    System.out.println();
                     isInputCorrect = true;
                     return false;
                 default:
@@ -168,6 +185,14 @@ public class WordleClone {
 
         }
         return true;
+    }
+
+    private void displayStatistics(){
+        System.out.println("\nNumber of games: "+ gamesPlayed);
+        System.out.println("Number of games won: "+ gamesWon);
+        System.out.println("Total number of guesses: "+avgNumGuesses);
+        System.out.println("Average number of guesses: "+ String.format("%.2f",(avgNumGuesses/gamesPlayed)));
+        System.out.println();
     }
 
 
