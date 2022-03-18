@@ -20,10 +20,6 @@ public class Letter {
         return letterChar;
     }
 
-    public void setLetterChar(char letterChar) {
-        this.letterChar = letterChar;
-    }
-
     public boolean isHasBeenGuessed() {
         return hasBeenGuessed;
     }
@@ -38,10 +34,6 @@ public class Letter {
 
     public void setInAnswer(boolean inAnswer) {
         this.inAnswer = inAnswer;
-    }
-
-    public int[] getLetterLocations() {
-        return letterLocations;
     }
 
     public int getSingleLocation(int postion){

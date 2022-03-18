@@ -6,20 +6,13 @@ import java.util.*;
 
 public class WordleClone {
     private Scanner userInput = new Scanner(System.in);
-    //private GameLogic gameLogic;
     private GameLogicAlternate gameLogicAlternate;
     private DisplayBoard displayBoard;
     public static final String GREEN = "\033[0;102m";  // GREEN
     public static final String YELLOW = "\033[0;103m"; // YELLOW
-    public static final String GREY = "\033[0;105m";  // PURPLE BACKGROUND \033[0;35m    [45m
+    public static final String GREY = "\033[0;105m";  // PURPLE BACKGROUND \033[0;35m
     public static final String ANSI_RESET = "\u001B[0m";
 
-
-    public WordleClone() {
-        //gameLogic = new GameLogic();
-        gameLogicAlternate = new GameLogicAlternate();
-        displayBoard = new DisplayBoard(gameLogicAlternate.getAlphabet());
-    }
 
     public static void main(String[] args) {
         WordleClone application = new WordleClone();
@@ -27,35 +20,19 @@ public class WordleClone {
     }
 
     private void run() {
-        System.out.println("*** "+gameLogicAlternate.getAnswerWord()+" ***");
         displayApplicationBanner();
-        displayMainMenu();
+        boolean keepPlaying = true;
+        while(keepPlaying){
+            keepPlaying = displayMainMenu();
+        }
         userInput.close();
     }
 
-    //game logic loop - OLD
-//    private void playGame() {
-//        System.out.println();
-//        System.out.println();
-//        String[] pastGuesses = gameLogic.getPastGuesses();
-//        displayBoard.printBoard(pastGuesses);
-//        printAlphabet();
-//        System.out.println();
-//        for (int i = 0; i < 6; i++) {
-//            System.out.println();
-//            pastGuesses[i] = userGuess();
-//            if (gameLogic.processWord(pastGuesses[i])) {
-//                displayBoard.printBoard(pastGuesses);
-//                System.out.println("YOU WIN!");
-//                break;
-//            }
-//            displayBoard.printBoard(pastGuesses);
-//            printAlphabet();
-//        }
-//    }
-
 
     private void playGame(){
+        gameLogicAlternate = new GameLogicAlternate();
+        displayBoard = new DisplayBoard(gameLogicAlternate.getAlphabet());
+        System.out.println("*** "+gameLogicAlternate.getAnswerWord()+" ***");
         System.out.println();
         System.out.println();
         List<List<Letter>> listOfGuesses = gameLogicAlternate.getListOfPastGuesses();
@@ -107,8 +84,6 @@ public class WordleClone {
     }
 
 
-
-
     //print available letters color coded to not used/ in word / in position
     //print before every guess
     private void printAlphabet() {
@@ -129,8 +104,6 @@ public class WordleClone {
                 case GREEN:
                     System.out.print(GREEN + numberToAlphaMap.get(i) + ANSI_RESET + "  ");
             }
-            //System.out.print(numberToAlphaMap.get(i)+"  ");
-            //System.out.print(ANSI_RESET);
         }
         System.out.println();
         for (int i = 10; i < 19; i++) {
@@ -147,8 +120,6 @@ public class WordleClone {
                 case GREEN:
                     System.out.print(" " + GREEN + numberToAlphaMap.get(i) + ANSI_RESET + " ");
             }
-            //System.out.print(" "+numberToAlphaMap.get(i)+" ");
-            //System.out.print(ANSI_RESET);
         }
         System.out.println();
         System.out.print("  ");
@@ -166,14 +137,12 @@ public class WordleClone {
                 case GREEN:
                     System.out.print("  " + GREEN + numberToAlphaMap.get(i) + ANSI_RESET);
             }
-            //System.out.print("  "+numberToAlphaMap.get(i));
-            //System.out.print(ANSI_RESET);
         }
         System.out.println(ANSI_RESET);
     }
 
 
-    private void displayMainMenu() {
+    private boolean displayMainMenu() {
         System.out.println("1. Play Game");
         System.out.println("2. Check stats");
         System.out.println("3. Exit");
@@ -184,7 +153,7 @@ public class WordleClone {
                 case "1":
                     isInputCorrect = true;
                     playGame();
-                    break;
+                    return true;
                 case "2":
                     isInputCorrect = true;
                     System.out.println("*** Numbers ***");
@@ -192,13 +161,15 @@ public class WordleClone {
                 case "3":
                     System.out.println("*** Quit ***");
                     isInputCorrect = true;
-                    break;
+                    return false;
                 default:
                     System.out.println("Input not valid");
             }
 
         }
+        return true;
     }
+
 
     private void displayApplicationBanner() {
         System.out.println();

@@ -7,7 +7,6 @@ import java.util.*;
 public class GameLogicAlternate {
 
     private String answerWord;
-    private List<String> pastGuesses;
     private Map<Character, Letter> alphabet = new HashMap<>();
     private Map<Integer, Character> numberToAlphaMap = new HashMap<>();
     private final List<String> wordList;
@@ -64,7 +63,6 @@ public class GameLogicAlternate {
             Letter letter = alphabet.get(value);
             letter.setInAnswer(true);
             letter.setLetterLocations(position);
-            //System.out.println("Letter "+value+" is in answer");
             position++;
         }
         return answerWord;
